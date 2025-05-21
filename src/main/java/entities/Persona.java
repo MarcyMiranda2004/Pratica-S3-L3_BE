@@ -2,8 +2,8 @@ package entities;
 
 import eunum.Sesso;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,62 +13,48 @@ public class Persona {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(length = 20,nullable = false)
     private String nome;
-
-    @Column(length = 20,nullable = false)
     private String cognome;
-
-    @Column(length = 30,nullable = false)
     private String email;
 
-    @Column(name = "data_nascita")
     private LocalDate dataDiNascita;
 
-    @Enumerated(EnumType.STRING) // Indica che l'enum sarà salvato come Stringa nel DB (es. "M", "F")
-    @Column(name = "sesso", nullable = false, length = 1)
+    @Enumerated(EnumType.STRING)
     private Sesso sesso;
 
-    @OneToMany(mappedBy = "partecipazione")
-    @Column(nullable = false)
-    private List<Partecipazione> listaPartecipazione;
+    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL)
+    private List<Partecipazione> listaPartecipazioni = new ArrayList<>();
 
-    public Persona(String nome, String cognome, String email, LocalDate dataDiNascita, Sesso sesso, List<Partecipazione> listaPartecipazione) {
+    public Persona() {}
+
+    public Persona(String nome, String cognome, String email, LocalDate dataDiNascita, Sesso sesso) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.dataDiNascita = dataDiNascita;
         this.sesso = sesso;
-        this.listaPartecipazione = listaPartecipazione;
     }
 
-    //id
-    public long getId() {return id;}
-    public void setId(long id) {this.id = id;}
+    // GETTERS & SETTERS
+    public long getId() { return id; }
 
-    //nome
-    public String getNome() {return nome;}
-    public void setNome(String nome) {this.nome = nome;}
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    //cognome
-    public String getCognome() {return cognome;}
-    public void setCognome(String cognome) {this.cognome = cognome;}
+    public String getCognome() { return cognome; }
+    public void setCognome(String cognome) { this.cognome = cognome; }
 
-    //email
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    //dataDiNascita
-    public LocalDate getDataDiNascita() {return dataDiNascita;}
-    public void setDataDiNascita(LocalDate dataDiNascita) {this.dataDiNascita = dataDiNascita;}
+    public LocalDate getDataDiNascita() { return dataDiNascita; }
+    public void setDataDiNascita(LocalDate dataDiNascita) { this.dataDiNascita = dataDiNascita; }
 
-    //sesso
-    public Sesso getSesso() {return sesso;}
-    public void setSesso(Sesso sesso) {this.sesso = sesso;}
+    public Sesso getSesso() { return sesso; }
+    public void setSesso(Sesso sesso) { this.sesso = sesso; }
 
-    //listaPartecipazioni
-    public List<Partecipazione> getListaPartecipazione() {return listaPartecipazione;}
-    public void setListaPartecipazione(List<Partecipazione> listaPartecipazione) {this.listaPartecipazione = listaPartecipazione;}
+    public List<Partecipazione> getListaPartecipazioni() { return listaPartecipazioni; }
+    public void setListaPartecipazioni(List<Partecipazione> listaPartecipazioni) { this.listaPartecipazioni = listaPartecipazioni; }
 
     @Override
     public String toString() {
@@ -79,7 +65,6 @@ public class Persona {
                 ", email='" + email + '\'' +
                 ", dataDiNascita=" + dataDiNascita +
                 ", sesso=" + sesso +
-                ", listaPartecipazione=" + listaPartecipazione +
                 '}';
     }
 }

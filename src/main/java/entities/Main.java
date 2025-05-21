@@ -1,20 +1,48 @@
 package entities;
 
-public class Main {
+import Dao.EventoDao;
+import Dao.LocationDao;
+import Dao.PartecipazioneDao;
+import Dao.PersonaDao;
+import eunum.Sesso;
+import eunum.Stato;
 
+import java.time.LocalDate;
+
+public class Main {
     public static void main(String[] args) {
 
-        EventoDao dao = new EventoDao();
+        // Inizializzo i DAO
+        PersonaDao personaDao = new PersonaDao();
+        LocationDao locationDao = new LocationDao();
+        EventoDao eventoDao = new EventoDao();
+        PartecipazioneDao partecipazioneDao = new PartecipazioneDao();
 
-        Evento e1 = new Evento("Titolo evento", java.time.LocalDate.now(), "Descrizione evento", TipoEvento.PUBBLICO, 100);
-        Evento e2 = new Evento("Hot Show", java.time.LocalDate.now(), "SUS", TipoEvento.PRIVATO, 50);
+        // Creo una persona
+        Persona persona = new Persona("Mario", "Rossi", "m.rossi@email.com", LocalDate.of(2000, 5, 21), Sesso.M);
+        personaDao.save(persona);
+        System.out.println("Persona salvata con ID: " + persona.getId());
 
-        dao.save(e1);
-        System.out.println("Evento salvato con ID: " + e1.getId());
+        // Creo una location
+        Location location = new Location("Stadio San Paolo", "Napoli");
+        locationDao.save(location);
+        System.out.println("Location salvata con ID: " + location.getId());
 
-        dao.save(e2);
-        System.out.println("Evento salvato con ID: " + e2.getId());
+        // Creo un evento collegato alla location
+        Evento evento = new Evento("Concerto", LocalDate.now(), "Concerto rock", TipoEvento.PUBBLICO, 2000);
+        evento.setLocation(location);
+        eventoDao.save(evento);
+        System.out.println("Evento salvato con ID: " + evento.getId());
 
-        dao.close();
+        // Creo una partecipazione che collega la persona all'evento
+        Partecipazione partecipazione = new Partecipazione(persona, evento, Stato.CONFERMATA);
+        partecipazioneDao.save(partecipazione);
+        System.out.println("Partecipazione salvata con ID: " + partecipazione.getId());
+
+        // Chiudo i DAO
+        personaDao.close();
+        locationDao.close();
+        eventoDao.close();
+        partecipazioneDao.close();
     }
 }

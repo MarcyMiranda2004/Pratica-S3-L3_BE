@@ -1,5 +1,6 @@
-package entities;
+package Dao;
 
+import entities.Evento;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -8,7 +9,7 @@ public class EventoDao {
 private EntityManager em;
 
 public EventoDao() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("Name_Pratica-S3-L2");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("Name_Pratica-S3-L3");
     em = emf.createEntityManager();
 }
 

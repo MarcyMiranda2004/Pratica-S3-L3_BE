@@ -3,6 +3,7 @@ package entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,13 +13,13 @@ public class Evento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(length = 20,nullable = false)
+    @Column(length = 20, nullable = false)
     private String titolo;
 
-    @Column(name = "data_nascita")
+    @Column(name = "data_evento")
     private LocalDate dataEvento;
 
-    @Column(length = 30,nullable = false)
+    @Column(length = 30, nullable = false)
     private String descrizione;
 
     @Enumerated(EnumType.STRING)
@@ -27,8 +28,14 @@ public class Evento {
     @Column(name = "numero_max_persone")
     private int numeroMaxPartecipanti;
 
-    @Column(name = "partecipazioni")
-    private List<Partecipazione> listaPartecipazioni;
+    @ManyToOne
+    @JoinColumn(name = "id_location")
+    private Location location;
+
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    private List<Partecipazione> listaPartecipazioni = new ArrayList<>();
+
+    public Evento() {}
 
     public Evento(String titolo, LocalDate dataEvento, String descrizione, TipoEvento tipoEvento, int numeroMaxPartecipanti) {
         this.titolo = titolo;
@@ -36,7 +43,6 @@ public class Evento {
         this.descrizione = descrizione;
         this.tipoEvento = tipoEvento;
         this.numeroMaxPartecipanti = numeroMaxPartecipanti;
-        this.listaPartecipazioni = li
     }
 
     //id
@@ -62,6 +68,14 @@ public class Evento {
     //numeroMaxPartecipanti
     public int getNumeroMaxPartecipanti() {return numeroMaxPartecipanti;}
     public void setNumeroMaxPartecipanti(int numeroMaxPartecipanti) {this.numeroMaxPartecipanti = numeroMaxPartecipanti;}
+
+    //location
+    public Location getLocation() {return location;}
+    public void setLocation(Location location) {this.location = location;}
+
+    //listaPartecipazioni
+    public List<Partecipazione> getListaPartecipazioni() {return listaPartecipazioni;}
+    public void setListaPartecipazioni(List<Partecipazione> listaPartecipazioni) {this.listaPartecipazioni = listaPartecipazioni;}
 
     @Override
     public String toString() {

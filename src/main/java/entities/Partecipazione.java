@@ -3,20 +3,26 @@ package entities;
 import eunum.Stato;
 import jakarta.persistence.*;
 
+@Entity
+@Table(name = "partecipazioni")
 public class Partecipazione {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(length = 20,nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_persona", nullable = false)
     private Persona persona;
 
-    @Column(length = 20,nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_evento", nullable = false)
     private Evento evento;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "stato", nullable = false, length = 20)
     private Stato stato;
+
+    public Partecipazione() {}
 
     public Partecipazione(Persona persona, Evento evento, Stato stato) {
         this.persona = persona;
